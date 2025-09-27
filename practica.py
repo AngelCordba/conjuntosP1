@@ -26,7 +26,7 @@ print(f"B es superconjunto de A: {B.issuperset(A)}")
 # .isdisjoint() ¿A y C son disjuntos? (no tienen elementos en común)
 print(f"A y C son disjuntos: {A.isdisjoint(C)}")
 
-# .copy() crea una copia superficial
+# .copy() crea una copia
 copia_A = A.copy()
 print(f"Copia de A: {copia_A}")
 
@@ -34,7 +34,7 @@ print("=" * 50)
 print("MÉTODOS DE CONJUNTOS")
 print("=" * 50)
 
-# Crear dos conjuntos simples
+# Creando dos conjuntos
 amigos_juan = {"Ana", "Luis", "Carlos", "María"}
 amigos_maria = {"María", "Carlos", "Elena", "Pedro"}
 
