@@ -1,0 +1,528 @@
+\documentclass[10pt]{beamer}
+\usetheme{Madrid}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Configuración de colores para el código
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codeblue}{rgb}{0,0,0.8}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codeblue},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    keepspaces=true,                 
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+\title{Operaciones con Conjuntos en Python}
+\subtitle{Teoría y Implementación}
+\author{Equipo: Conjuntos}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+\section{Introducción}
+\begin{frame}{¿Qué son los Conjuntos en Python?}
+    \begin{block}{Definición}
+        Estructura de datos que almacena elementos \textbf{únicos} y \textbf{no ordenados}
+    \end{block}
+    
+    \begin{itemize}
+        \item Similar a los conjuntos matemáticos
+        \item No permiten elementos duplicados
+        \item No mantienen un orden específico
+        \item Optimizados para operaciones de pertenencia
+    \end{itemize}
+    
+    \begin{exampleblock}{Creación de conjuntos}
+        \begin{lstlisting}[language=Python]
+        # Desde una lista
+        conjunto1 = set([1, 2, 3, 4, 5])
+        
+        # Directamente
+        conjunto2 = {1, 2, 3, 4, 5}
+        
+        # Conjunto vacío
+        vacio = set()
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{Operaciones Básicas}
+
+\begin{frame}[fragile]{add() - Agregar Elementos}
+    \begin{block}{Función}
+        Agrega un elemento al conjunto
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos}
+        \begin{lstlisting}[language=Python]
+        numeros = {1, 2, 3}
+        
+        # Agregar un elemento
+        numeros.add(4)
+        print(numeros)  # {1, 2, 3, 4}
+        
+        # Intentar agregar duplicado
+        numeros.add(2)
+        print(numeros)  # {1, 2, 3, 4} (sin cambios)
+        
+        # Agregar múltiples elementos
+        numeros.add(5)
+        numeros.add(6)
+        print(numeros)  # {1, 2, 3, 4, 5, 6}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{remove() vs discard()}
+    \begin{block}{Diferencias}
+        \begin{itemize}
+            \item \texttt{remove(x)}: Elimina x, genera error si no existe
+            \item \texttt{discard(x)}: Elimina x, no genera error si no existe
+        \end{itemize}
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Comparativos}
+        \begin{lstlisting}[language=Python]
+        conjunto = {1, 2, 3, 4, 5}
+        
+        # remove() - genera error si el elemento no existe
+        conjunto.remove(3)
+        print(conjunto)  # {1, 2, 4, 5}
+        
+        # discard() - no genera error
+        conjunto.discard(2)
+        print(conjunto)  # {1, 4, 5}
+        
+        conjunto.discard(10)  # No pasa nada
+        # conjunto.remove(10)  # KeyError!
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{clear() y pop()}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{clear()}
+            Elimina todos los elementos
+        \end{block}
+        \begin{lstlisting}[language=Python]
+        conjunto = {1, 2, 3}
+        print(conjunto)  # {1, 2, 3}
+        
+        conjunto.clear()
+        print(conjunto)  # set()
+        \end{lstlisting}
+        
+        \column{0.5\textwidth}
+        \begin{block}{pop()}
+            Elimina y retorna un elemento aleatorio
+        \end{block}
+        \begin{lstlisting}[language=Python]
+        conjunto = {1, 2, 3, 4, 5}
+        
+        while conjunto:
+            elemento = conjunto.pop()
+            print(f"Removido: {elemento}")
+        
+        print(conjunto)  # set()
+        \end{lstlisting}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{copy() - Copia de Conjuntos}
+    \begin{alertblock}{¡Importante!}
+        La asignación directa crea una referencia, no una copia
+    \end{alertblock}
+    
+    \begin{exampleblock}{Diferencia entre copy() y asignación}
+        \begin{lstlisting}[language=Python]
+        original = {1, 2, 3, 4, 5}
+        
+        # copy() crea un nuevo conjunto
+        copia = original.copy()
+        
+        # Asignación crea una referencia
+        referencia = original
+        
+        # Modificamos el original
+        original.add(6)
+        
+        print("Original:", original)
+        print("Copia:", copia)        # No cambia
+        print("Referencia:", referencia)  # Cambia
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{Operaciones de Conjunto}
+
+\begin{frame}[fragile]{union() - Unión de Conjuntos}
+    \begin{block}{Definición Matemática}
+        $A \cup B = \{x \mid x \in A \lor x \in B\}$
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Python}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3}
+        B = {3, 4, 5}
+        
+        # Método union()
+        union1 = A.union(B)
+        print(union1)  # {1, 2, 3, 4, 5}
+        
+        # Operador |
+        union2 = A | B
+        print(union2)  # {1, 2, 3, 4, 5}
+        
+        # Múltiples conjuntos
+        C = {5, 6, 7}
+        union3 = A.union(B, C)
+        print(union3)  # {1, 2, 3, 4, 5, 6, 7}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{intersection() - Intersección}
+    \begin{block}{Definición Matemática}
+        $A \cap B = \{x \mid x \in A \land x \in B\}$
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Python}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3, 4}
+        B = {3, 4, 5, 6}
+        
+        # Método intersection()
+        interseccion1 = A.intersection(B)
+        print(interseccion1)  # {3, 4}
+        
+        # Operador &
+        interseccion2 = A & B
+        print(interseccion2)  # {3, 4}
+        
+        # Múltiples conjuntos
+        C = {4, 5, 7}
+        interseccion3 = A.intersection(B, C)
+        print(interseccion3)  # {4}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{difference() - Diferencia}
+    \begin{block}{Definición Matemática}
+        $A - B = \{x \mid x \in A \land x \notin B\}$
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Python}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3, 4, 5}
+        B = {4, 5, 6, 7}
+        
+        # Diferencia A - B
+        diff1 = A.difference(B)
+        print(diff1)  # {1, 2, 3}
+        
+        # Operador -
+        diff2 = A - B
+        print(diff2)  # {1, 2, 3}
+        
+        # Diferencia B - A
+        diff3 = B - A
+        print(diff3)  # {6, 7}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{symmetric\_difference()}
+    \begin{block}{Definición Matemática}
+        $A \triangle B = (A - B) \cup (B - A)$
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Python}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3, 4}
+        B = {3, 4, 5, 6}
+        
+        # Método symmetric_difference()
+        sym_diff1 = A.symmetric_difference(B)
+        print(sym_diff1)  # {1, 2, 5, 6}
+        
+        # Operador ^
+        sym_diff2 = A ^ B
+        print(sym_diff2)  # {1, 2, 5, 6}
+        
+        # Propiedad conmutativa
+        sym_diff3 = B ^ A
+        print(sym_diff3)  # {1, 2, 5, 6}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{Operaciones de Comparación}
+
+\begin{frame}[fragile]{issubset() - Subconjunto}
+    \begin{block}{Definición Matemática}
+        $A \subseteq B \iff \forall x (x \in A \implies x \in B)$
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Python}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2}
+        B = {1, 2, 3, 4}
+        C = {1, 5}
+        
+        print(A.issubset(B))   # True
+        print(A <= B)          # True
+        print(C.issubset(B))   # False
+        
+        # Subconjunto propio
+        print(A < B)           # True
+        print(A < A)           # False
+        print(A <= A)          # True
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{issuperset() - Superconjunto}
+    \begin{block}{Definición Matemática}
+        $A \supseteq B \iff B \subseteq A$
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Python}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3, 4}
+        B = {1, 2}
+        C = {1, 5}
+        
+        print(A.issuperset(B))   # True
+        print(A >= B)            # True
+        print(A.issuperset(C))   # False
+        
+        # Superconjunto propio
+        print(A > B)             # True
+        print(A > A)             # False
+        print(A >= A)            # True
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{isdisjoint() - Conjuntos Disjuntos}
+    \begin{block}{Definición Matemática}
+        $A \cap B = \emptyset$
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos Python}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3}
+        B = {4, 5, 6}
+        C = {3, 4, 5}
+        
+        print(A.isdisjoint(B))   # True
+        print(A.isdisjoint(C))   # False
+        print(B.isdisjoint(C))   # False
+        
+        # Con conjunto vacío
+        vacio = set()
+        print(A.isdisjoint(vacio))  # True
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{Métodos de Actualización}
+
+\begin{frame}[fragile]{update() y Variantes}
+    \begin{block}{Característica}
+        Modifican el conjunto original (in-place)
+    \end{block}
+    
+    \begin{exampleblock}{Ejemplos}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3}
+        B = {3, 4, 5}
+        
+        # update() - union in-place
+        A.update(B)
+        print(A)  # {1, 2, 3, 4, 5}
+        
+        # intersection_update()
+        A = {1, 2, 3, 4}
+        A.intersection_update(B)
+        print(A)  # {3, 4}
+        
+        # difference_update()
+        A = {1, 2, 3, 4, 5}
+        A.difference_update(B)
+        print(A)  # {1, 2}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{Aplicaciones Prácticas}
+
+\begin{frame}[fragile]{Ejemplo: Análisis de Datos}
+    \begin{exampleblock}{Análisis de Usuarios}
+        \begin{lstlisting}[language=Python]
+        # Usuarios en diferentes plataformas
+        facebook = {"Ana", "Carlos", "Diana", "Eva"}
+        twitter = {"Carlos", "Diana", "Fran", "Gabo"}
+        instagram = {"Ana", "Eva", "Gabo", "Héctor"}
+        
+        # Usuarios en todas las plataformas
+        todas = facebook & twitter & instagram
+        print("En todas:", todas)  # set()
+        
+        # Usuarios únicos de Instagram
+        solo_instagram = instagram - facebook - twitter
+        print("Solo Instagram:", solo_instagram)  # {'Héctor'}
+        
+        # Total de usuarios únicos
+        total_usuarios = facebook | twitter | instagram
+        print("Total usuarios:", len(total_usuarios))  # 7
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo: Eliminación de Duplicados}
+    \begin{exampleblock}{Limpieza de Datos}
+        \begin{lstlisting}[language=Python]
+        # Lista con duplicados
+        emails = [
+            "user@example.com", "admin@test.com",
+            "user@example.com", "info@demo.com",
+            "admin@test.com", "support@site.com"
+        ]
+        
+        print("Original:", len(emails), "emails")  # 6 emails
+        
+        # Eliminar duplicados usando conjuntos
+        emails_unicos = list(set(emails))
+        print("Únicos:", len(emails_unicos), "emails")  # 4 emails
+        
+        # Mantener orden (Python 3.7+)
+        from collections import OrderedDict
+        emails_ordenados = list(OrderedDict.fromkeys(emails))
+        print("Ordenados:", emails_ordenados)
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo: Sistema de Recomendación}
+    \begin{exampleblock}{Intereses de Usuarios}
+        \begin{lstlisting}[language=Python]
+        # Intereses de usuarios
+        usuario1 = {"python", "ml", "data science", "ai"}
+        usuario2 = {"python", "web development", "javascript"}
+        usuario3 = {"java", "mobile", "android"}
+        
+        # Encontrar intereses comunes
+        comunes_1_2 = usuario1 & usuario2
+        print("Comunes usuario1-2:", comunes_1_2)  # {'python'}
+        
+        # Recomendaciones basadas en intereses
+        recomendaciones_1 = usuario2 - usuario1
+        print("Recomendaciones para usuario1:", recomendaciones_1)
+        # {'web development', 'javascript'}
+        
+        # Usuarios con intereses similares
+        similares = usuario1 | usuario2
+        print("Intereses similares:", similares)
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{Resumen y Mejores Prácticas}
+
+\begin{frame}{Tabla Resumen de Operaciones}
+    \scriptsize
+    \begin{tabular}{p{3cm} p{2cm} p{3cm} p{4cm}}
+    \hline
+    \textbf{Operación} & \textbf{Símbolo} & \textbf{Método} & \textbf{Descripción} \\
+    \hline
+    Unión & $|$ & \texttt{union()} & Elementos en A o B \\
+    Intersección & $\&$ & \texttt{intersection()} & Elementos en A y B \\
+    Diferencia & $-$ & \texttt{difference()} & Elementos en A pero no en B \\
+    Dif. Simétrica & $\wedge$ & \texttt{symmetric\_difference()} & Elementos en A o B pero no ambos \\
+    Subconjunto & $<=$ & \texttt{issubset()} & Todos los elementos de A en B \\
+    Superconjunto & $>=$ & \texttt{issuperset()} & A contiene todos los elementos de B \\
+    Disjuntos & - & \texttt{isdisjoint()} & No comparten elementos \\
+    \hline
+    \end{tabular}
+\end{frame}
+
+\begin{frame}{Mejores Prácticas}
+    \begin{block}{Consejos de Uso}
+        \begin{itemize}
+            \item \textbf{Operadores vs Métodos}: Usa operadores para código más limpio
+            \item \textbf{Copia vs Referencia}: Siempre usa \texttt{copy()} para duplicados
+            \item \textbf{Eliminación Segura}: Prefiere \texttt{discard()} sobre \texttt{remove()}
+            \item \textbf{Eliminación de Duplicados}: Conjuntos son la forma más eficiente
+            \item \textbf{Actualizaciones In-place}: Usa métodos \texttt{update()} para mejor performance
+        \end{itemize}
+    \end{block}
+    
+    \begin{alertblock}{Ventajas de Rendimiento}
+        \begin{itemize}
+            \item Búsqueda de elementos: O(1)
+            \item Inserción: O(1)
+            \item Eliminación: O(1)
+            \item Operaciones de conjunto: O(n)
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Preguntas Frecuentes}
+    \begin{block}{¿Cuándo usar conjuntos?}
+        \begin{itemize}
+            \item Cuando necesitas elementos únicos
+            \item Para pruebas rápidas de pertenencia
+            \item Para eliminar duplicados
+            \item Para operaciones matemáticas entre colecciones
+        \end{itemize}
+    \end{block}
+    
+    \begin{block}{¿Cuándo NO usar conjuntos?}
+        \begin{itemize}
+            \item Cuando necesitas orden
+            \item Cuando necesitas elementos indexados
+            \item Cuando trabajas con datos duplicados
+            \item Cuando los elementos no son hasheables
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge ¡Gracias!\\
+    \vspace{1cm}
+    \Large ¿Preguntas?
+\end{frame}
+
+\end{document}

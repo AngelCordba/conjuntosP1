@@ -1,0 +1,24 @@
+
+## 👥 Integrantes del Equipo "Conjuntos"
+
+| Nombre | Rol | Contacto |
+|--------|-----|----------|
+| *[Carlos Alberto Bello Rosas]* |1 | *[carlgalois@gmail.com]* |
+| *[César Cirilo Manzanarez]* | 2 | *[email2@uaz.edu.mx]* |
+| *[Ángel Vicente Córdoba Ramirez]* | 3 | *[vicentecordobara244@gmail.com]* |
+| *[Manuel Contreras]* | 4 | *[email4@uaz.edu.mx]* |
+
+## 🚀 Instalación y Configuración
+
+### Prerrequisitos
+- Python 3.8 o superior
+- pip (gestor de paquetes de Python)
+
+### Instalación
+```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/conjuntos-python.git
+cd conjuntos-python
+
+# Instalar dependencias (si las hay)
+pip install -r config/requirements.txt

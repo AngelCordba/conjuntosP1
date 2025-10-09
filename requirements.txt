@@ -1,0 +1,9 @@
+# Requerimientos para los ejemplos y ejercicios
+# Python 3.8+
+
+# No se requieren librerías externas para los ejemplos básicos
+# Este archivo se mantiene para futuras expansiones
+
+# Posibles futuras dependencias:
+# numpy>=1.21.0
+# matplotlib>=3.5.0

@@ -1,0 +1,257 @@
+\documentclass[10pt]{beamer}
+\usetheme{Madrid}
+\usepackage[spanish]{babel}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codeblue}{rgb}{0,0,0.8}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codeblue},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    keepspaces=true,                 
+    numbers=left,       
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Conjuntos en Python}
+\subtitle{Operaciones Especializadas}
+\author{Carlos Alberto Bello R.}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+\section{Introducción}
+\begin{frame}{Conjuntos en Python}
+    \begin{itemize}
+        \item Estructura de datos no ordenada
+        \item Elementos únicos (no duplicados)
+        \item Mutable pero los elementos deben ser hasheables
+        \item Soporta operaciones matemáticas de conjuntos
+    \end{itemize}
+\end{frame}
+
+\section{Operaciones}
+\begin{frame}{Funciones a Estudiar}
+    \begin{itemize}
+        \item \texttt{issubset()} - Subconjunto
+        \item \texttt{issuperset()} - Superconjunto
+        \item \texttt{isdisjoint()} - Conjuntos disjuntos
+        \item \texttt{copy()} - Copia superficial
+    \end{itemize}
+\end{frame}
+
+\section{issubset()}
+\begin{frame}[fragile]{issubset()}
+    \begin{block}{Definición}
+        Verifica si todos los elementos de un conjunto están contenidos en otro
+    \end{block}
+    
+    \begin{exampleblock}{Sintaxis}
+        \begin{lstlisting}[language=Python]
+        conjunto_a.issubset(conjunto_b)
+        # O usando operador <=
+        conjunto_a <= conjunto_b
+        \end{lstlisting}
+    \end{exampleblock}
+    
+    \begin{figure}
+    \centering
+    \begin{tikzpicture}[thick, scale=0.6]
+        \draw (0,0) circle (2cm) node [left] {B};
+        \draw (0,0) circle (1cm) node {A};
+        \node at (0,-3) {A $\subseteq$ B};
+    \end{tikzpicture}
+    \caption{Diagrama de subconjunto}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplos issubset()}
+    \begin{exampleblock}{Código práctico}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3}
+        B = {1, 2, 3, 4, 5}
+        
+        print(A.issubset(B))  # True
+        print(B.issubset(A))  # False
+        
+        # Con operador
+        print(A <= B)  # True
+        print(A <= A)  # True (subconjunto impropio)
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{issuperset()}
+\begin{frame}[fragile]{issuperset()}
+    \begin{block}{Definición}
+        Verifica si un conjunto contiene todos los elementos de otro
+    \end{block}
+    
+    \begin{exampleblock}{Sintaxis}
+        \begin{lstlisting}[language=Python]
+        conjunto_a.issuperset(conjunto_b)
+        # O usando operador >=
+        conjunto_a >= conjunto_b
+        \end{lstlisting}
+    \end{exampleblock}
+    
+    \begin{figure}
+    \centering
+    \begin{tikzpicture}[thick, scale=0.6]
+        \draw (0,0) circle (2cm) node [left] {A};
+        \draw (0,0) circle (1cm) node {B};
+        \node at (0,-3) {A $\supseteq$ B};
+    \end{tikzpicture}
+    \caption{Diagrama de superconjunto}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplos issuperset()}
+    \begin{exampleblock}{Código práctico}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3, 4, 5}
+        B = {1, 2, 3}
+        
+        print(A.issuperset(B))  # True
+        print(B.issuperset(A))  # False
+        
+        # Con operador
+        print(A >= B)  # True
+        print(A >= A)  # True
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{isdisjoint()}
+\begin{frame}[fragile]{isdisjoint()}
+    \begin{block}{Definición}
+        Verifica si dos conjuntos no tienen elementos en común
+    \end{block}
+    
+    \begin{exampleblock}{Sintaxis}
+        \begin{lstlisting}[language=Python]
+        conjunto_a.isdisjoint(conjunto_b)
+        \end{lstlisting}
+    \end{exampleblock}
+    
+    \begin{figure}
+    \centering
+    \begin{tikzpicture}[thick, scale=0.6]
+        \draw (0,0) circle (1.5cm) node {A};
+        \draw (3,0) circle (1.5cm) node {B};
+        \node at (1.5,-3) {A $\cap$ B = $\emptyset$};
+    \end{tikzpicture}
+    \caption{Conjuntos disjuntos}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplos isdisjoint()}
+    \begin{exampleblock}{Código práctico}
+        \begin{lstlisting}[language=Python]
+        A = {1, 2, 3}
+        B = {4, 5, 6}
+        C = {3, 4, 5}
+        
+        print(A.isdisjoint(B))  # True
+        print(A.isdisjoint(C))  # False
+        print(B.isdisjoint(C))  # False
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{copy()}
+\begin{frame}[fragile]{copy()}
+    \begin{block}{Definición}
+        Crea una copia superficial del conjunto
+    \end{block}
+    
+    \begin{alertblock}{Importante}
+        Diferencia con asignación directa:
+        \begin{itemize}
+            \item \texttt{copy()} crea nuevo conjunto
+            \item Asignación crea referencia al original
+        \end{itemize}
+    \end{alertblock}
+    
+    \begin{exampleblock}{Sintaxis}
+        \begin{lstlisting}[language=Python]
+        nuevo_conjunto = conjunto_original.copy()
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplos copy()}
+    \begin{exampleblock}{Código práctico}
+        \begin{lstlisting}[language=Python]
+        original = {1, 2, 3}
+        
+        # Copia
+        copia = original.copy()
+        
+        # Referencia
+        referencia = original
+        
+        original.add(4)
+        
+        print(original)    # {1, 2, 3, 4}
+        print(copia)       # {1, 2, 3}
+        print(referencia)  # {1, 2, 3, 4}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\section{Resumen}
+\begin{frame}{Comparativa Visual}
+    \begin{table}
+    \begin{tabular}{l l l}
+    \hline
+    \textbf{Función} & \textbf{Símbolo} & \textbf{Relación} \\
+    \hline
+    issubset() & $\subseteq$ & Inclusión \\
+    issuperset() & $\supseteq$ & Contención \\
+    isdisjoint() & $\cap$ = $\emptyset$ & Disyunción \\
+    \hline
+    \end{tabular}
+    \caption{Resumen de operaciones}
+    \end{table}
+    
+    \begin{alertblock}{Recomendaciones}
+    \begin{itemize}
+        \item Usar operadores para código más compacto
+        \item Preferir \texttt{copy()} sobre asignación para duplicados
+        \item Aprovechar estas funciones para comparaciones complejas
+    \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge ¿Preguntas?
+\end{frame}
+
+\end{document}
